@@ -1,0 +1,27 @@
+.table-wrapper {
+    /* allow scrolling if the table is wider than the wrapper */
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%; /* or whatever max size you need */
+}
+
+/* 1. keep table from auto-sizing down to the wrapper width */
+.table-wrapper table {
+    /* table will expand to fit its content */
+    width: max-content;
+
+    /* optional: switch to auto layout if you’d rather let 
+     columns size to content rather than fixed widths */
+    table-layout: auto;
+
+    /* this helps keep borders/cells behaving normally */
+    border-collapse: collapse;
+}
+
+/* 2. prevent wrapping inside all cells */
+.table-wrapper th,
+.table-wrapper td {
+    white-space: nowrap; /* no wrapping at all */
+    word-break: normal; /* don’t break words */
+    padding: 0.5em 1em;
+}

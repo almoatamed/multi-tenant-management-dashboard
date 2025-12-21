@@ -1,0 +1,73 @@
+.hoverable:hover {
+    background-color: #00000022;
+}
+
+.hoverable-text {
+    transition: all 0.3s;
+}
+.hoverable-text:hover {
+    color: #0938b0;
+    font-weight: 700;
+}
+
+html,
+body,
+#app {
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+}
+
+// .drawer-width {
+//     transition: all 0.5s;
+// }
+::-webkit-scrollbar {
+    width: 6px; /* For vertical scrollbars */
+    height: 6px; /* For horizontal scrollbars */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.4); /* Gray with transparency */
+    border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.7);
+}
+
+.required-field .v-label::after {
+    content: " *";
+    color: red;
+}
+
+* {
+    scrollbar-width: thin !important;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+    scrollbar-color: rgba(100, 100, 100, 0.4) transparent;
+}
+html {
+    overflow-y: auto;
+}
+
+.tiny-autocomplete {
+    font-size: 0.75rem; /* reduce font globally */
+}
+
+.tiny-autocomplete .v-field__input {
+    font-size: 0.75rem;
+    min-height: 32px; /* reduce height */
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.tiny-autocomplete .v-field__label {
+    font-size: 0.7rem;
+}
