@@ -30,10 +30,10 @@ const AddDialog = dc(
         const backendAbsolutePathOnServerRules = [rules.required(backendAbsolutePathOnServerLabel), rules.title(backendAbsolutePathOnServerLabel)];
 
         const devTemplate = `server {
-   listen 80;
-   server_name  <|||>SUBDOMAIN</|||>.local;
-   index index.html;
-   root   /home/salem/saraf/currencyExchangeManagerDashboard;
+    listen 80;
+    server_name  <|||>SUBDOMAIN</|||>.local;
+    index index.html;
+    root   /home/salem/saraf/currencyExchangeManagerDashboard;
 
     location /api {
         proxy_pass http://localhost:<|||>SERVICE_PORT</|||>;
