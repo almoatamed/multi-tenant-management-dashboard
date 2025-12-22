@@ -237,7 +237,7 @@ const AddButton = dc(
 );
 
 const ServicesScreen = dc(() => {
-    const numberOfItemsPerPage = ref(-1 as null | number);
+    const numberOfItemsPerPage = ref(-1);
     const numberOfItemsPerPageChoices: {
         label: string;
         value: number;
@@ -256,6 +256,8 @@ const ServicesScreen = dc(() => {
                 }}
             >
                 <ApiTable<Service>
+                    numberOfItemsPerPage={numberOfItemsPerPage.value}
+                    numberOfItemsPerPageChoices={numberOfItemsPerPageChoices}
                     apiDataExtractor={(data) => {
                         return data.services;
                     }}
