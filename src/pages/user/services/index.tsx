@@ -258,6 +258,9 @@ const ServicesScreen = dc(() => {
                 <ApiTable<Service>
                     numberOfItemsPerPage={numberOfItemsPerPage.value}
                     numberOfItemsPerPageChoices={numberOfItemsPerPageChoices}
+                    setNumberOfItemsPerPage={(v) => {
+                        numberOfItemsPerPage.value = v;
+                    }}
                     apiDataExtractor={(data) => {
                         return data.services;
                     }}
