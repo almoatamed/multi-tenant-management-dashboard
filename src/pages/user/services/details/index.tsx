@@ -210,6 +210,51 @@ const TakeAction = dc(
     },
 );
 
+const DetailsFields = dc((props: { details: DetailsType }) => {
+        const d = props.details;
+
+    return () => {
+
+        return (
+            <>
+                <FieldsSections
+                    sections={[
+                        {
+                            fields: [
+                                {
+                                    text: "ID",
+                                    value: d.id,
+                                    copyOnClick: true,
+                                },
+
+                                {
+                                    text: "Name",
+                                    value: d.name,
+                                    copyOnClick: true,
+                                },
+
+                                {
+                                    text: "Backend Service Deployment Path",
+                                    value: d.backendAbsolutePathOnServer,
+                                    copyOnClick: true,
+                                },
+
+                                {
+                                    text: "Nginx Config",
+                                    copyOnClick: true,
+                                    value: d.nginxTemplate,
+                                },
+                            ],
+                        },
+                    ]}
+                ></FieldsSections>
+            </>
+        );
+    };
+}, {
+    props: ["details"]
+});
+
 const DetailsScreen = dc(() => {
     const loadingDetails = ref(false);
     const details = ref(null as null | DetailsType);
@@ -311,6 +356,7 @@ const DetailsScreen = dc(() => {
                         message={apiError.value?.error}
                         messages={apiError.value?.errors}
                     ></AlertView>
+                    <DetailsFields details={details.value}></DetailsFields>
                 </ThemedView>
             </>
         );

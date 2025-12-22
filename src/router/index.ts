@@ -12,7 +12,7 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "services",
+                    path: "",
                     component: () => {
                         return import("@/pages/user/services");
                     },
