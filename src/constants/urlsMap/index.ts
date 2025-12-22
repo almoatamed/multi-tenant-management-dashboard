@@ -5,5 +5,6 @@ export enum urlsMap {
     // Services
     servicesList = "service/services",
     serviceGet = "service/service/:id",
+    serviceUpdateName = "service/service/update/name",
     servicesRegister = "service/service/register",
 }

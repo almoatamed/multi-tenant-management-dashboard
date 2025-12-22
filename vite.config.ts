@@ -93,7 +93,7 @@ export default ({ mode }: any) => {
                     autoRewrite: true,
                 },
             },
-            port: 3000,
+            port: 3001,
             allowedHosts: [String(process.env.VITE_MY_TAILSCALE)],
         },
 
