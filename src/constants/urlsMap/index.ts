@@ -1,10 +1,9 @@
 export enum urlsMap {
     // Auth
-    authLogin="user/login",
-
+    authLogin = "user/login",
 
     // Services
-    servicesList="service/services",
-    servicesRegister="service/service/register",
-
+    servicesList = "service/services",
+    serviceGet = "service/service/:id",
+    servicesRegister = "service/service/register",
 }
