@@ -7,8 +7,9 @@ import { urlsMap } from "@/constants/urlsMap";
 import router from "@/router";
 import { VCard, VCardActions, VCardText, VDialog, VForm, VProgressCircular } from "vuetify/components";
 import { useLocale } from "vuetify";
-import { sleep } from "@/utils/common";
 import { rules } from "@/utils/clientValidationRules";
+import { colors } from "@/plugins/vuetify";
+import { showConfirm } from "@/utils/confirm";
 
 type DetailsType = Service;
 const back = () => {
@@ -137,8 +138,9 @@ const UpdateServiceNameDialog = dc(
 );
 
 const TakeAction = dc(
-    (props: { details: DetailsType; refresh: () => void | Promise<void> }) => {
+    (props: { details: DetailsType; setApiError: (error: ApiError) => void; refresh: () => void | Promise<void> }) => {
         const targetUpdateNameService = ref(null as null | DetailsType);
+        const loading = ref(false);
 
         return () => {
             return (
@@ -155,11 +157,46 @@ const TakeAction = dc(
                     />
 
                     <ActionsList
+                        loading={loading.value}
                         actions={[
                             {
                                 label: "Update Name",
                                 action() {
                                     targetUpdateNameService.value = props.details;
+                                },
+                            },
+                            {
+                                label: "Delete",
+                                textColor: "white",
+                                backgroundColor: colors.red.base,
+                                action: async () => {
+                                    if (loading.value) {
+                                        return;
+                                    }
+
+                                    loading.value = true;
+                                    try {
+                                        const confirmed = await showConfirm({
+                                            message: "are you sure you want to delete this service? (this service wont be deleted if it has any tenants)",
+                                            title: "Delete",
+                                            type: "error",
+                                        });
+
+                                        if (!confirmed) {
+                                            return;
+                                        }
+
+                                        await api.delete(urlsMap.serviceDelete.replace(":id", String(props.details.id)));
+                                        back();
+                                    } catch (error) {
+                                        console.error(error);
+                                        const e = extractApiError(error);
+                                        if (e) {
+                                            props.setApiError(e);
+                                        }
+                                    } finally {
+                                        loading.value = false;
+                                    }
                                 },
                             },
                         ]}
@@ -169,13 +206,15 @@ const TakeAction = dc(
         };
     },
     {
-        props: ["details", "refresh"],
+        props: ["details", "refresh", "setApiError"],
     },
 );
 
 const DetailsScreen = dc(() => {
     const loadingDetails = ref(false);
     const details = ref(null as null | DetailsType);
+
+    const apiError = ref(null as null | ApiError);
 
     const loadDetails = async () => {
         if (loadingDetails.value) {
@@ -253,11 +292,25 @@ const DetailsScreen = dc(() => {
                         end={() => {
                             return (
                                 <>
-                                    <TakeAction details={details.value!} refresh={loadDetails} />
+                                    <TakeAction
+                                        setApiError={(e) => {
+                                            apiError.value = e;
+                                        }}
+                                        details={details.value!}
+                                        refresh={loadDetails}
+                                    />
                                 </>
                             );
                         }}
                     ></PageHeader>
+                    <AlertView
+                        type="error"
+                        onClear={() => {
+                            apiError.value = null;
+                        }}
+                        message={apiError.value?.error}
+                        messages={apiError.value?.errors}
+                    ></AlertView>
                 </ThemedView>
             </>
         );
