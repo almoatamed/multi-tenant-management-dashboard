@@ -95,7 +95,7 @@ const AddDialog = dc(
                 <>
                     <VDialog
                         modelValue={props.shown}
-                        maxWidth={"600px"}
+                        maxWidth={"800px"}
                         onUpdate:modelValue={() => {
                             props.cancel();
                         }}
@@ -141,11 +141,15 @@ const AddDialog = dc(
                                             onUpdate:modelValue={(t) => {
                                                 backendAbsolutePathOnServer.value = t;
                                             }}
+                                            // @ts-ignore
+                                            spellcheck="false"
                                         ></TextField>
 
                                         <VTextarea
                                             noResize={false}
                                             name="nginx-template"
+
+
                                             modelValue={nginxTemplate.value}
                                             onUpdate:modelValue={(v) => {
                                                 nginxTemplate.value = v;
@@ -154,6 +158,12 @@ const AddDialog = dc(
                                             rules={nginxTemplateRules}
                                             class="required-field"
                                             label={nginxTemplateLabel}
+
+
+
+                                            // @ts-ignore
+                                            type="code"
+                                            spellcheck="false"
                                         ></VTextarea>
                                     </ThemedView>
                                 </VForm>
