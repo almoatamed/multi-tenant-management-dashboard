@@ -11,7 +11,20 @@ const router = createRouter({
                 return import("@/layouts/default");
             },
             children: [
-
+                {
+                    path: "services",
+                    component: () => {
+                        return import("@/pages/user/services");
+                    },
+                    name: "Services",
+                },
+                {
+                    path: "service/details/:id",
+                    component: ()=>{
+                        return import("@/pages/user/services/details")
+                    },
+                    name: "ServiceDetails"
+                }
             ],
             meta: {
                 requiresAuth: true,
@@ -78,7 +91,6 @@ router.beforeEach((to, from) => {
             name: "Home",
         });
     }
-
 
     return true;
 });

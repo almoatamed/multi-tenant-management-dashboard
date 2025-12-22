@@ -18,6 +18,10 @@ export const useSections = () => {
         {
             title: t("Main"),
             routes: [
+                {
+                    label: "Services",
+                    name: "Services",
+                }
             ],
         },
     ];

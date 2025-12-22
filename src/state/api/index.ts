@@ -6,6 +6,7 @@ import { extractApiError } from "@/utils/errors/extractor";
 export const api = axios.create({
     baseURL: getBaseUrl(),
     timeout: 120e3,
+    adapter: "fetch",
 });
 api.interceptors.request.use((config) => {
     if (user.value?.token) {
