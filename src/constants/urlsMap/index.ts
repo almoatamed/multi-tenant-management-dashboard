@@ -8,4 +8,5 @@ export enum urlsMap {
     serviceUpdateName = "service/service/update/name",
     servicesRegister = "service/service/register",
     serviceDelete = "service/service/delete/:id",
+    serviceTenantsPaginate = "service/service/:id/tenant/paginate",
 }

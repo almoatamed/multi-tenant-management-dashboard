@@ -10,7 +10,9 @@ import { useLocale } from "vuetify";
 import { rules } from "@/utils/clientValidationRules";
 import { colors } from "@/plugins/vuetify";
 import { showConfirm } from "@/utils/confirm";
-
+import { defaultNumberOfItemsPerPageChoices } from "@/components/Table/types";
+import type { Tenant } from "../../tenants/types";
+import { dashDateFormatter } from "@/utils/common";
 type DetailsType = Service;
 const back = () => {
     router.push({
@@ -210,50 +212,52 @@ const TakeAction = dc(
     },
 );
 
-const DetailsFields = dc((props: { details: DetailsType }) => {
+const DetailsFields = dc(
+    (props: { details: DetailsType }) => {
         const d = props.details;
 
-    return () => {
+        return () => {
+            return (
+                <>
+                    <FieldsSections
+                        sections={[
+                            {
+                                fields: [
+                                    {
+                                        text: "ID",
+                                        value: d.id,
+                                        copyOnClick: true,
+                                    },
 
-        return (
-            <>
-                <FieldsSections
-                    sections={[
-                        {
-                            fields: [
-                                {
-                                    text: "ID",
-                                    value: d.id,
-                                    copyOnClick: true,
-                                },
+                                    {
+                                        text: "Name",
+                                        value: d.name,
+                                        copyOnClick: true,
+                                    },
 
-                                {
-                                    text: "Name",
-                                    value: d.name,
-                                    copyOnClick: true,
-                                },
+                                    {
+                                        text: "Backend Service Deployment Path",
+                                        value: d.backendAbsolutePathOnServer,
+                                        copyOnClick: true,
+                                    },
 
-                                {
-                                    text: "Backend Service Deployment Path",
-                                    value: d.backendAbsolutePathOnServer,
-                                    copyOnClick: true,
-                                },
-
-                                {
-                                    text: "Nginx Config",
-                                    copyOnClick: true,
-                                    value: d.nginxTemplate,
-                                },
-                            ],
-                        },
-                    ]}
-                ></FieldsSections>
-            </>
-        );
-    };
-}, {
-    props: ["details"]
-});
+                                    {
+                                        text: "Nginx Config",
+                                        copyOnClick: true,
+                                        value: d.nginxTemplate,
+                                    },
+                                ],
+                            },
+                        ]}
+                    ></FieldsSections>
+                </>
+            );
+        };
+    },
+    {
+        props: ["details"],
+    },
+);
 
 const DetailsScreen = dc(() => {
     const loadingDetails = ref(false);
@@ -357,10 +361,111 @@ const DetailsScreen = dc(() => {
                         messages={apiError.value?.errors}
                     ></AlertView>
                     <DetailsFields details={details.value}></DetailsFields>
+                    <TenantsTable service={details.value} />
                 </ThemedView>
             </>
         );
     };
 });
+
+const TenantsTable = dc(
+    (props: { service: Service }) => {
+        const numberOfItemsPerPage = ref(10);
+        const url = urlsMap.serviceTenantsPaginate.replace(":id", String(props.service.id));
+
+        return () => {
+            return (
+                <>
+                    <ApiTable<Tenant>
+                        apiDataExtractor={(data) => data.tenants}
+                        apiTotalExtractor={(data) => data.total}
+                        headers={[
+                            {
+                                key: "id",
+                                label: "ID",
+                                value: (row) => String(row.id),
+                            },
+                            {
+                                key: "__actions",
+                                actions: [
+                                    {
+                                        label: "Details",
+                                        iconName: "mdi-export",
+                                        action(row, _props) {
+                                            router.push({
+                                                name: "TenantDetails",
+                                                params: {
+                                                    id: row.id,
+                                                },
+                                            });
+                                        },
+                                        href(row) {
+                                            return router.resolve({
+                                                name: "TenantDetails",
+                                                params: {
+                                                    id: row.id,
+                                                },
+                                            }).href;
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                key: "client-id",
+                                label: "Client ID",
+                                value: (row) => String(row.client.id || ""),
+                            },
+                            {
+                                key: "client-name",
+                                label: "Client Name",
+                                value: (row) => row.client.name,
+                            },
+                            {
+                                key: "plan-type",
+                                label: "Plan Type",
+                                value: (row) => row.plans[0]?.type || "",
+                            },
+                            {
+                                key: "expiration-data",
+                                label: "Expiration Date",
+                                value: (row) => {
+                                    const p = row.plans[0];
+                                    if (!p || p.type != "subscription") {
+                                        return "";
+                                    }
+                                    return dashDateFormatter(p.expirationDate, {
+                                        dateFormat: "yyyy-mm-dd",
+                                        getDate: true,
+                                        getTime: false,
+                                    });
+                                },
+                            },
+                        ]}
+                        onRefresh={(props, refresh) => {
+                            refresh({
+                                queryParams: {
+                                    take: numberOfItemsPerPage.value,
+                                    skip: props.skip,
+                                },
+                            });
+                        }}
+                        title="Service Tenant List"
+                        url={url}
+                        iconName="mdi-server"
+                        numberOfItemsPerPage={numberOfItemsPerPage.value}
+                        setNumberOfItemsPerPage={(v) => {
+                            numberOfItemsPerPage.value = v;
+                        }}
+                        numberOfItemsPerPageChoices={defaultNumberOfItemsPerPageChoices}
+                        showNumber
+                    ></ApiTable>
+                </>
+            );
+        };
+    },
+    {
+        props: ["service"],
+    },
+);
 
 export default DetailsScreen;
