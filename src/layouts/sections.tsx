@@ -21,7 +21,11 @@ export const useSections = () => {
                 {
                     label: "Services",
                     name: "Services",
-                }
+                },
+                {
+                    label: "Tenants",
+                    name: "Tenants",
+                },
             ],
         },
     ];

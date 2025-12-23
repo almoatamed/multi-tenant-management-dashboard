@@ -9,4 +9,11 @@ export enum urlsMap {
     servicesRegister = "service/service/register",
     serviceDelete = "service/service/delete/:id",
     serviceTenantsPaginate = "service/service/:id/tenant/paginate",
+
+    // Tenants
+    tenantPaginate = "service/tenant/paginate",
+
+    // Client
+    clientListAll = "service/clients"
+
 }

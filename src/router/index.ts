@@ -20,11 +20,27 @@ const router = createRouter({
                 },
                 {
                     path: "service/details/:id",
-                    component: ()=>{
-                        return import("@/pages/user/services/details")
+                    component: () => {
+                        return import("@/pages/user/services/details");
                     },
-                    name: "ServiceDetails"
-                }
+                    name: "ServiceDetails",
+                },
+
+                {
+                    path: "tenants",
+                    component: () => {
+                        return import("@/pages/user/tenants");
+                    },
+                    name: "Tenants",
+                },
+
+                {
+                    path: "tenants/:id",
+                    component: () => {
+                        return import("@/pages/user/tenants/details");
+                    },
+                    name: "TenantDetails",
+                },
             ],
             meta: {
                 requiresAuth: true,
